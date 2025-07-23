@@ -5,12 +5,14 @@ class Database {
     private $conn;
 
     public function __construct() {
-        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); // Optional for development
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         $this->conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-        
+
         if ($this->conn->connect_error) {
             throw new Exception("Connection failed: " . $this->conn->connect_error);
         }
+
+        $this->conn->set_charset("utf8mb4");
     }
 
     public function getConnection() {
@@ -19,7 +21,6 @@ class Database {
 
     public function query($sql, $params = []) {
         $stmt = $this->conn->prepare($sql);
-        
         if ($stmt === false) {
             throw new Exception("SQL error: " . $this->conn->error . " in query: " . $sql);
         }
@@ -27,7 +28,7 @@ class Database {
         if (!empty($params)) {
             $types = '';
             $values = [];
-            
+
             foreach ($params as $param) {
                 if (is_int($param)) {
                     $types .= 'i';
@@ -49,13 +50,17 @@ class Database {
     public function fetchAll($sql, $params = []) {
         $stmt = $this->query($sql, $params);
         $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close(); // 🔴 important to avoid "commands out of sync"
+        return $data;
     }
 
     public function fetchOne($sql, $params = []) {
         $stmt = $this->query($sql, $params);
         $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        $data = $result->fetch_assoc();
+        $stmt->close(); // 🔴 important
+        return $data;
     }
 
     public function insert($table, $data) {
@@ -71,7 +76,7 @@ class Database {
 
         $sql = "INSERT INTO `$table` (" . implode(', ', $columns) . ") VALUES (" . implode(', ', $placeholders) . ")";
         $stmt = $this->query($sql, $values);
-
+        $stmt->close(); // 🔴 important
         return $this->conn->insert_id;
     }
 
@@ -92,12 +97,9 @@ class Database {
 
         $sql = "UPDATE `$table` SET " . implode(', ', $setParts) . " WHERE " . implode(' AND ', $whereParts);
         $stmt = $this->query($sql, $values);
-
-        return $stmt->affected_rows;
-    }
-
-    public function lastInsertId() {
-        return $this->conn->insert_id;
+        $affected = $stmt->affected_rows;
+        $stmt->close(); // 🔴 important
+        return $affected;
     }
 
     public function delete($table, $conditions) {
@@ -111,9 +113,14 @@ class Database {
 
         $sql = "DELETE FROM `$table` WHERE " . implode(' AND ', $whereParts);
         $stmt = $this->query($sql, $values);
-        return $stmt->affected_rows;
+        $affected = $stmt->affected_rows;
+        $stmt->close(); // 🔴 important
+        return $affected;
+    }
+
+    public function lastInsertId() {
+        return $this->conn->insert_id;
     }
 }
 
 $db = new Database();
-?>

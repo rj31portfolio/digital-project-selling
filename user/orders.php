@@ -1,8 +1,8 @@
  <?php
-require_once '../../includes/config.php';
-require_once '../../includes/db.php';
-require_once '../../includes/auth.php';
-require_once '../../includes/functions.php';
+require_once '../includes/config.php';
+require_once '../includes/db.php';
+require_once '../includes/auth.php';
+require_once '../includes/functions.php';
 
 if (!$auth->isLoggedIn()) {
     $functions->redirect('../../login.php');
@@ -12,7 +12,7 @@ $userId = $_SESSION['user_id'];
 $orders = $functions->getUserOrders($userId);
 
 $pageTitle = 'My Orders';
-require_once '../../includes/header.php';
+require_once '../includes/header.php';
 ?>
 
 <div class="card">
@@ -67,4 +67,4 @@ require_once '../../includes/header.php';
     </div>
 </div>
 
-<?php require_once '../../includes/footer.php'; ?>
+<?php require_once '../includes/footer.php'; ?>

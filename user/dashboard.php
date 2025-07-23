@@ -1,8 +1,8 @@
  <?php
-require_once '../../includes/config.php';
-require_once '../../includes/db.php';
-require_once '../../includes/auth.php';
-require_once '../../includes/functions.php';
+require_once '../includes/config.php';
+require_once '../includes/db.php';
+require_once '../includes/auth.php';
+require_once '../includes/functions.php';
 
 if (!$auth->isLoggedIn()) {
     $functions->redirect('../../login.php');
@@ -13,7 +13,7 @@ $user = $auth->getUser($userId);
 $projects = $functions->getUserProjects($userId);
 
 $pageTitle = 'User Dashboard';
-require_once '../../includes/header.php';
+require_once '../includes/header.php';
 ?>
 
 <div class="row">
@@ -129,4 +129,4 @@ document.getElementById('copyProfileLink').addEventListener('click', function() 
 });
 </script>
 
-<?php require_once '../../includes/footer.php'; ?>
+<?php require_once '../includes/footer.php'; ?>
