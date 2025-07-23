@@ -9,6 +9,7 @@ if (!$auth->isLoggedIn() || !$auth->isAdmin()) {
 }
 
 // Get stats for dashboard
+$totalCategories = $functions->db->fetchOne("SELECT COUNT(*) as total FROM categories")['total'];
 $totalProjects = $functions->db->fetchOne("SELECT COUNT(*) as total FROM projects")['total'];
 $totalUsers = $functions->db->fetchOne("SELECT COUNT(*) as total FROM users")['total'];
 $totalOrders = $functions->db->fetchOne("SELECT COUNT(*) as total FROM orders")['total'];
@@ -45,7 +46,22 @@ require_once '../includes/header.php';
             </div>
         </div>
     </div>
-    
+    <div class="col-md-3 mb-4">
+    <div class="card bg-secondary text-white">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="card-title">Total Categories</h6>
+                    <h2 class="mb-0"><?php echo $totalCategories; ?></h2>
+                </div>
+                <i class="bi bi-tags" style="font-size: 2rem;"></i>
+            </div>
+        </div>
+        <div class="card-footer bg-secondary-dark">
+            <a href="categories/list.php" class="text-white">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+</div>
     <div class="col-md-3 mb-4">
         <div class="card bg-success text-white">
             <div class="card-body">
@@ -153,6 +169,9 @@ require_once '../includes/header.php';
                 <h5 class="mb-0">Quick Actions</h5>
             </div>
             <div class="list-group list-group-flush">
+                <a href="categories/list.php" class="list-group-item list-group-item-action">
+    <i class="bi bi-tags"></i> Manage Categories
+</a>
                 <a href="projects/add.php" class="list-group-item list-group-item-action">
                     <i class="bi bi-plus-circle"></i> Add New Project
                 </a>
