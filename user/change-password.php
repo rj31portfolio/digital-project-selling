@@ -1,11 +1,11 @@
  <?php
-require_once '../../includes/config.php';
-require_once '../../includes/db.php';
-require_once '../../includes/auth.php';
-require_once '../../includes/functions.php';
+require_once '../includes/config.php';
+require_once '../includes/db.php';
+require_once '../includes/auth.php';
+require_once '../includes/functions.php';
 
 if (!$auth->isLoggedIn()) {
-    $functions->redirect('../../login.php');
+    $functions->redirect('../login.php');
 }
 
 $userId = $_SESSION['user_id'];
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageTitle = 'Change Password';
-require_once '../../includes/header.php';
+require_once '../includes/header.php';
 
 if (isset($_SESSION['success_message'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success_message'] . '</div>';
@@ -69,4 +69,4 @@ if (isset($error)) {
     </div>
 </div>
 
-<?php require_once '../../includes/footer.php'; ?>
+<?php require_once '../includes/footer.php'; ?>

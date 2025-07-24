@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -34,24 +34,31 @@
                 <ul class="navbar-nav">
                     <?php if ($auth->isLoggedIn()): ?>
                         <?php if ($auth->isAdmin()): ?>
+                            <!-- Admin Panel Link -->
                             <li class="nav-item">
                                 <a class="nav-link" href="<?php echo BASE_URL; ?>admin/dashboard.php">Admin Panel</a>
                             </li>
+                        <?php else: ?>
+                            <!-- User Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                    <img src="<?php echo BASE_URL . 'assets/uploads/users/' . ($_SESSION['user_image'] ?: 'default.png'); ?>" class="rounded-circle me-1" width="30" height="30">
+                                    <?php echo $_SESSION['user_name']; ?>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>user/dashboard.php">Dashboard</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>user/profile.php">Profile</a></li>
+                                    <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>user/orders.php">My Orders</a></li>
+                                </ul>
+                            </li>
                         <?php endif; ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                <img src="<?php echo BASE_URL . 'assets/uploads/users/' . ($_SESSION['user_image'] ?: 'default.png'); ?>" class="rounded-circle me-1" width="30" height="30">
-                                <?php echo $_SESSION['user_name']; ?>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>user/dashboard.php">Dashboard</a></li>
-                                <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>user/profile.php">Profile</a></li>
-                                <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>user/orders.php">My Orders</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="<?php echo BASE_URL; ?>logout.php">Logout</a></li>
-                            </ul>
+
+                        <!-- Logout Link (Always for logged-in users) -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo BASE_URL; ?>logout.php">Logout</a>
                         </li>
                     <?php else: ?>
+                        <!-- Guest Links -->
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo BASE_URL; ?>login.php">Login</a>
                         </li>
